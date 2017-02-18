@@ -3,6 +3,8 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.CookieStore;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -14,17 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import connection.Connection;
+import database.Settings;
+import model.AccountModel;
 import model.Model;
 
 public class SecondaryServlet extends HttpServlet{
 	
-	private Connection conn = Connection.getInstance();
+	private Model model = new Model();
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
-		List<Model> users = conn.getUsers();
+		List<AccountModel> users = model.getListAccounts();
 		Enumeration paramNames = req.getParameterNames();
 		String parName;
 		
@@ -54,7 +58,6 @@ public class SecondaryServlet extends HttpServlet{
 		String password = null;
 		while(paramNames.hasMoreElements()){
 			parName = paramNames.nextElement().toString();
-			System.out.println(parName);
 			if (parName.equals("login")){
 				login = req.getParameter(parName);
 			}
@@ -62,11 +65,12 @@ public class SecondaryServlet extends HttpServlet{
 				password = req.getParameter(parName);
 			}
 		}
-
+		System.out.println(login + "    "  + password);
 		boolean p = false;
+		System.out.println(users);
 		if(users != null){
-		System.out.println(users.size());
-			for(Model user : users){
+			for(AccountModel user : users){
+				System.out.println(user.getLogin() + "cc" + user.getPassword());
 				if (user.getLogin().equals(login) && user.getPassword().equals(password)){
 					hasExist = true;
 				}
@@ -85,17 +89,17 @@ public class SecondaryServlet extends HttpServlet{
 		{
 			//RequestDispatcher reqDispatcher = req.getRequestDispatcher("registry2.jsp");
 			//reqDispatcher.forward(req, resp);
-			System.out.println(login + " " + password);
 			if (p){
 				out.println(
 					"<h2>Login using!!!</h2>");
 			}
 			else{
-				String name = req.getParameter("login");
-				Cookie cookie = new Cookie("login", login);
-				cookie.setMaxAge(30*60);
-				resp.addCookie(cookie);
-				conn.addAccounts(login, password);
+//				String name = req.getParameter("login");
+//				Cookie cookie = new Cookie("login", login);
+//				cookie.setMaxAge(30*60);
+//				resp.addCookie(cookie);
+				Settings settings = new Settings("", "", "", Date.valueOf(LocalDate.now()));
+				model.entityFilling(login, password, settings);
 			}
 		}
 	}

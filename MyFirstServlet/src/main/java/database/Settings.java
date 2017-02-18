@@ -14,14 +14,14 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Generated;
 
 @Entity
-@Table(name = "SETTINGS", uniqueConstraints = {
+@Table(name = "CONFIGURATION", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "CONFIGURATION_ID")
 })
 public class Settings implements Serializable{
 
 	private static final long serialVersionUID = 1529089957228828802L;
 
-	@Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id@GeneratedValue()
 	@Column(name = "CONFIGURATION_ID")
 	private Integer id;
 	
@@ -37,7 +37,7 @@ public class Settings implements Serializable{
 	@Column(name = "BIRTHDAY", unique = false, nullable = true)
 	private Date birthday;
 	
-	public long getId() {
+	public Integer getId() {
         return id;
     }
  
@@ -84,5 +84,10 @@ public class Settings implements Serializable{
     	this.lastName = lastName;
     	this.city = city;
     	this.birthday = birthday;
+    }
+    
+    @Override
+    public String toString(){
+    	return "Settings [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", city=" + city + ", date=" + birthday + "]";
     }
 }

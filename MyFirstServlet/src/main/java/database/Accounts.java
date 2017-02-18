@@ -29,7 +29,7 @@ public class Accounts implements Serializable{
 
 	@OneToOne
 	@JoinColumn(name = "CONFIGURATION_ID")
-	private Settings configId;
+	private Settings config;
 	
 	@Column(name = "LOGIN", unique = true, nullable = false, length = 100)
 	private String login;
@@ -41,8 +41,8 @@ public class Accounts implements Serializable{
 		return id;
 	}
 
-	public Settings getConfigId(){
-		return configId;
+	public Settings getConfiguration(){
+		return config;
 	}
 	
 	public String getLogin(){
@@ -53,8 +53,8 @@ public class Accounts implements Serializable{
 		return password;
 	}
 	
-	public void setConfigId(Settings configId){
-		this.configId = configId;
+	public void setConfiguration(Settings config){
+		this.config = config;
 	}
 	
 	public void setLogin(String login){
@@ -64,4 +64,9 @@ public class Accounts implements Serializable{
 	public void setPassword(String password){
 		this.password = password;
 	}
+	
+	@Override
+    public String toString(){
+    	return "Accounts [id=" + id + ", login=" + login + ", password=" + password + ", settings=" + config + "]";
+    }
 }
